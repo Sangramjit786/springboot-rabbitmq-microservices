@@ -72,7 +72,7 @@ Publish order messages to RabbitMQ.
 **Implementation:**
 - Used RabbitTemplate.
 - Created OrderEventProducer with:
-```
+```java
 rabbitTemplate.convertAndSend(exchange, routingKey, message);
 ```
 
@@ -104,3 +104,75 @@ Consume messages from order.queue.
 
 **Key Point:**
 Consumers should be independently configurable.
+
+### 7) StockService – Create RabbitMQ Consumer
+
+**Objective:**
+Validate stock based on received order events.
+
+**Implementation:**
+- Annotated method with:
+```java
+@RabbitListener(queues = "order.queue")
+```
+- Parsed JSON/POJO message.
+- Simulated stock check logic.
+
+**Professional Emphasis:**
+Stress idempotency, error handling, and retry mechanisms during interviews.
+
+### 8) OrderService – Configure Email Queue and Binding
+
+**Objective:**
+Allow OrderService to emit events to email.queue.
+
+**Implementation:**
+- Defined a second queue email.queue.
+- Added binding with routing key (e.g., email.routing.key).
+- Bound to exchange (same or new).
+
+**Rationale:**
+Supports multi-routing → one event can trigger multiple services.
+
+### 9) OrderService – Send Event to Email Queue
+
+**Objective:**
+Emit a notification event when order is placed.
+
+**Steps:**
+- Updated producer to send messages to:
+  1. order.queue
+  2. email.queue
+
+**Professional Insight:**
+Handles cross-cutting concerns like notifications in an asynchronous way.
+
+### 10) EmailService – Configure RabbitMQ and Create Consumer
+
+**Objective:**
+Consume email messages and simulate notification sending.
+
+**Implementation:**
+- Configured email.queue in properties.
+- Added @RabbitListener(queues = "email.queue").
+- Mocked logic → sendEmail(order.getEmail()).
+
+**Best Practice:**
+Messaging concerns stay modular, keeping side-effects (emails) isolated.
+
+### 11) Run 3 Microservices and Have a Demo
+
+**Objective:**
+Show the end-to-end workflow.
+
+**Demo Flow:**
+
+  1. Start RabbitMQ broker.
+  2. Start OrderService, StockService, EmailService.
+  3. Send POST /api/orders request to OrderService.
+  4. Verify flow:
+    - StockService consumes → stock validated.
+    - EmailService consumes → email logged/sent.
+
+**Result:**
+Validates a working event-driven microservice architecture.
