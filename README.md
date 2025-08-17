@@ -79,6 +79,8 @@ rabbitTemplate.convertAndSend(exchange, routingKey, message);
 **Best Practice:**
 Producer logic is decoupled from controller → easier testing & refactoring.
 
+---
+
 ### 5) OrderService – Create REST API to Send Message
 
 **Objective:**
@@ -93,6 +95,8 @@ Expose an endpoint to accept orders and trigger RabbitMQ events.
 **Technical Insight:**
 Synchronous REST → Asynchronous messaging → better decoupling.
 
+---
+
 ### 6) StockService – Configure RabbitMQ
 
 **Objective:**
@@ -104,6 +108,8 @@ Consume messages from order.queue.
 
 **Key Point:**
 Consumers should be independently configurable.
+
+---
 
 ### 7) StockService – Create RabbitMQ Consumer
 
@@ -121,6 +127,8 @@ Validate stock based on received order events.
 **Professional Emphasis:**
 Stress idempotency, error handling, and retry mechanisms during interviews.
 
+---
+
 ### 8) OrderService – Configure Email Queue and Binding
 
 **Objective:**
@@ -133,6 +141,8 @@ Allow OrderService to emit events to email.queue.
 
 **Rationale:**
 Supports multi-routing → one event can trigger multiple services.
+
+---
 
 ### 9) OrderService – Send Event to Email Queue
 
@@ -147,6 +157,8 @@ Emit a notification event when order is placed.
 **Professional Insight:**
 Handles cross-cutting concerns like notifications in an asynchronous way.
 
+---
+
 ### 10) EmailService – Configure RabbitMQ and Create Consumer
 
 **Objective:**
@@ -159,6 +171,8 @@ Consume email messages and simulate notification sending.
 
 **Best Practice:**
 Messaging concerns stay modular, keeping side-effects (emails) isolated.
+
+---
 
 ### 11) Run 3 Microservices and Have a Demo
 
@@ -175,3 +189,53 @@ Show the end-to-end workflow.
 
 **Result:**
 Validates a working event-driven microservice architecture.
+
+## 🛠️ How to Run
+
+**1. Start RabbitMQ locally (via Docker):**
+```bash
+docker run -d --hostname my-rabbit --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+```
+
+**2. Clone repo:**
+```bash
+git clone https://github.com/Sangramjit786/springboot-rabbitmq-microservices.git
+cd springboot-rabbitmq-microservices
+```
+
+**3. Run each microservice:**
+```bash
+cd OrderService && mvn spring-boot:run
+cd StockService && mvn spring-boot:run
+cd EmailService && mvn spring-boot:run
+```
+
+**4. Test:**
+```http
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "orderId": "101",
+  "product": "Laptop",
+  "quantity": 1,
+  "email": "customer@example.com"
+}
+```
+
+## ✅ Summary
+
+This project illustrates a production-ready microservice architecture with:
+
+- Event-driven design using RabbitMQ
+- Spring Boot for microservices
+- REST APIs + Messaging integration
+- Decoupling, scalability, and reliability
+
+It demonstrates real-world proficiency in RabbitMQ configuration, message publishing/consuming, and distributed system design.
+
+## 🔗 References
+
+- Spring AMQP Documentation
+- RabbitMQ Official Docs
+- Spring Boot Documentation
