@@ -170,8 +170,8 @@ Show the end-to-end workflow.
   2. Start OrderService, StockService, EmailService.
   3. Send POST /api/orders request to OrderService.
   4. Verify flow:
-  - StockService consumes → stock validated.
-  - EmailService consumes → email logged/sent.
+    - StockService consumes → stock validated.
+    - EmailService consumes → email logged/sent.
 
 **Result:**
 Validates a working event-driven microservice architecture.
