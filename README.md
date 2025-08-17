@@ -8,6 +8,11 @@ It consists of **three microservices** working together to process orders asynch
 
 ---
 
+## Event-Driven Microservices Project Architecture Flow:
+<img width="997" height="506" alt="image" src="https://github.com/user-attachments/assets/c5848f43-8e4c-4cad-9bae-4a82d8edd083" />
+
+---
+
 ## 📂 Microservices Overview
 
 ### 1) Create 3 Microservices – OrderService, StockService, and EmailService
